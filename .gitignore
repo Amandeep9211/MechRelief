@@ -1,0 +1,25 @@
+# dependencies (everyone runs npm install themselves)
+node_modules/
+
+# build output
+dist/
+distweb/
+web-build/
+.expo/
+
+# secrets - NEVER push these
+.env
+.env.*
+*.pem
+*.key
+google-services.json
+GoogleService-Info.plist
+application-local.properties
+
+# editor / OS junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+.claude/
