@@ -1,18 +1,19 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { INSPECTION_REPORT as R } from '../data/mock';
 import { Page, Header, Card, Row, Divider, Button, SectionTitle } from '../components/ui';
 
 const TONE = {
-  ok: ['check-circle', colors.green, 'Good'],
-  attention: ['alert-circle', '#FFB020', 'Needs attention'],
-  bad: ['close-circle', '#FF6B66', 'Problem'],
+  ok: ['check-circle', 'green', 'Good'],
+  attention: ['alert-circle', 'amber', 'Needs attention'],
+  bad: ['close-circle', 'redText', 'Problem'],
 };
 
 // Car Inspection ki structured report (proposal Objective 4). Inspector checklist bharta hai, customer ko report milti hai.
 export default function InspectionReport() {
+  useTheme();
   const router = useRouter();
   return (
     <Page
@@ -35,7 +36,8 @@ export default function InspectionReport() {
 
       <SectionTitle>Checklist results</SectionTitle>
       {R.items.map((it) => {
-        const [icon, color, label] = TONE[it.status];
+        const [icon, token, label] = TONE[it.status];
+        const color = colors[token];
         return (
           <View key={it.name} style={s.item}>
             <Icon name={icon} size={24} color={color} />
@@ -53,7 +55,7 @@ export default function InspectionReport() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   score: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   ring: { width: 92, height: 92, borderRadius: 46, borderWidth: 6, borderColor: colors.green, alignItems: 'center', justifyContent: 'center' },
   num: { color: colors.text, fontSize: 28, fontWeight: '800', lineHeight: 30 },
@@ -64,5 +66,5 @@ const s = StyleSheet.create({
   itemTop: { flexDirection: 'row', justifyContent: 'space-between', gap: 8 },
   itemName: { color: colors.text, fontSize: 14.5, fontWeight: '700', flex: 1 },
   itemTag: { fontSize: 12, fontWeight: '700' },
-  note: { color: '#AAB4C0', fontSize: 12.5, marginTop: 4, lineHeight: 18 },
-});
+  note: { color: colors.soft, fontSize: 12.5, marginTop: 4, lineHeight: 18 },
+}));

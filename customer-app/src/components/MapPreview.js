@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import { colors } from '../constants/theme';
+import { colors, themed, useTheme } from '../constants/theme';
 
 // Map ki jagah ek khud-banaya hua "map preview" (koi API key nahi chahiye).
 // Backend step mein yahan asli Google Map aayega. Props:
@@ -8,6 +8,7 @@ import { colors } from '../constants/theme';
 //  - worker: worker ka marker dikhao
 //  - progress: 0..1, worker rasta kitna tay kar chuka (marker aage barhta hai)
 export default function MapPreview({ height = 200, route = false, worker = false, progress = 0.35, label, style }) {
+  useTheme();
   const you = { x: 0.74, y: 0.7 };
   const start = { x: 0.16, y: 0.24 };
   const mid = { x: you.x, y: start.y };       // rasta: pehle seedha, phir neeche
@@ -44,7 +45,7 @@ export default function MapPreview({ height = 200, route = false, worker = false
 
       {worker && (
         <View style={[s.marker, { left: `${w.x * 100}%`, top: `${w.y * 100}%` }]}>
-          <View style={s.car}><Icon name="car-wrench" size={18} color="#fff" /></View>
+          <View style={s.car}><Icon name="car-wrench" size={18} color={colors.onAccent} /></View>
         </View>
       )}
 
@@ -58,14 +59,14 @@ export default function MapPreview({ height = 200, route = false, worker = false
   );
 }
 
-const s = StyleSheet.create({
-  map: { borderRadius: 20, overflow: 'hidden', backgroundColor: '#1B2229', borderWidth: 1, borderColor: colors.border },
-  road: { position: 'absolute', backgroundColor: '#262F38' },
-  block: { position: 'absolute', backgroundColor: '#212A24', borderRadius: 6 },
+const s = themed((colors) => ({
+  map: { borderRadius: 20, overflow: 'hidden', backgroundColor: colors.mapBg, borderWidth: 1, borderColor: colors.border },
+  road: { position: 'absolute', backgroundColor: colors.mapRoad },
+  block: { position: 'absolute', backgroundColor: colors.mapBlock, borderRadius: 6 },
   dot: { position: 'absolute', width: 7, height: 7, borderRadius: 4, marginLeft: -3, marginTop: -3, backgroundColor: colors.orange },
   marker: { position: 'absolute', width: 0, height: 0, alignItems: 'center', justifyContent: 'center' },
   pulse: { position: 'absolute', width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,122,26,0.18)' },
-  car: { width: 34, height: 34, borderRadius: 17, backgroundColor: '#2D6BFF', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: '#fff' },
-  label: { position: 'absolute', left: 10, bottom: 8, flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: 'rgba(11,13,16,0.8)', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10 },
+  car: { width: 34, height: 34, borderRadius: 17, backgroundColor: '#2D6BFF', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: colors.onAccent },
+  label: { position: 'absolute', left: 10, bottom: 8, flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: colors.mapLabel, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10 },
   labelText: { color: colors.muted, fontSize: 10.5 },
-});
+}));

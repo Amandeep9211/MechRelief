@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { Page, Header, Button, Input, FieldLabel } from '../components/ui';
 
 // Forgot password, step 3: naya password set karo. Phir login par wapas.
 export default function ResetPassword() {
+  useTheme();
   const router = useRouter();
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
@@ -31,7 +32,7 @@ export default function ResetPassword() {
     return (
       <Page footer={<Button title="Back to Login" icon="login" onPress={() => router.replace('/login')} />}>
         <View style={s.hero}>
-          <View style={[s.iconWrap, { backgroundColor: colors.green }]}><Icon name="check" size={46} color="#fff" /></View>
+          <View style={[s.iconWrap, { backgroundColor: colors.green }]}><Icon name="check" size={46} color={colors.onAccent} /></View>
           <Text style={s.title}>Password updated</Text>
           <Text style={s.sub}>Your password has been changed. You can now sign in with your new password.</Text>
         </View>
@@ -77,14 +78,14 @@ export default function ResetPassword() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   hero: { alignItems: 'center', paddingVertical: 10, marginBottom: 6 },
   iconWrap: { width: 88, height: 88, borderRadius: 44, backgroundColor: 'rgba(255,122,26,0.12)', alignItems: 'center', justifyContent: 'center' },
   title: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: 16, textAlign: 'center' },
-  sub: { color: '#AAB4C0', fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 8 },
+  sub: { color: colors.soft, fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 8 },
   eye: { position: 'absolute', right: 16, top: 0, bottom: 0, justifyContent: 'center' },
   rules: { marginTop: 16, gap: 8 },
   rule: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   ruleText: { color: colors.muted, fontSize: 13.5 },
   err: { color: colors.red, fontSize: 13, marginTop: 12 },
-});
+}));

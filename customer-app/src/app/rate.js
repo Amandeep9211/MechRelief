@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { money } from '../utils/format';
 import { Page, Button, Card, Row, Divider, Avatar, Stars, Input, Pill } from '../components/ui';
@@ -12,6 +12,7 @@ const WORDS = ['', 'Poor', 'Fair', 'Good', 'Very good', 'Excellent'];
 
 // Job ke baad rating aur review (proposal: har job rating ke saath khatam hoti hai).
 export default function Rate() {
+  useTheme();
   const router = useRouter();
   const { job, finishJob } = useApp();
   const [rating, setRating] = useState(5);
@@ -37,7 +38,7 @@ export default function Rate() {
   return (
     <Page footer={<Button title="Submit Review" icon="send-outline" onPress={submit} />}>
       <View style={s.hero}>
-        <View style={s.tick}><Icon name="check" size={40} color="#fff" /></View>
+        <View style={s.tick}><Icon name="check" size={40} color={colors.onAccent} /></View>
         <Text style={s.title}>Job Completed</Text>
         <Text style={s.sub}>Payment confirmed by both sides. Thanks for using MechRelief.</Text>
       </View>
@@ -65,7 +66,7 @@ export default function Rate() {
             const on = tags.includes(t);
             return (
               <Pressable key={t} onPress={() => toggle(t)} style={[s.tag, on && s.tagOn]}>
-                <Text style={[s.tagText, on && { color: colors.orange }]}>{t}</Text>
+                <Text style={[s.tagText, on && { color: colors.orangeText }]}>{t}</Text>
               </Pressable>
             );
           })}
@@ -78,18 +79,18 @@ export default function Rate() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   hero: { alignItems: 'center', paddingVertical: 10, marginBottom: 12 },
   tick: { width: 76, height: 76, borderRadius: 38, backgroundColor: colors.green, alignItems: 'center', justifyContent: 'center' },
   title: { color: colors.text, fontSize: 25, fontWeight: '800', marginTop: 14 },
-  sub: { color: '#AAB4C0', fontSize: 14, textAlign: 'center', marginTop: 6, lineHeight: 20 },
+  sub: { color: colors.soft, fontSize: 14, textAlign: 'center', marginTop: 6, lineHeight: 20 },
   worker: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   wName: { color: colors.text, fontSize: 16, fontWeight: '700' },
   wSub: { color: colors.muted, fontSize: 12.5, marginTop: 2 },
   q: { color: colors.text, fontSize: 17, fontWeight: '700' },
-  word: { color: '#FFB020', fontWeight: '700', marginTop: 8 },
+  word: { color: colors.amber, fontWeight: '700', marginTop: 8 },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 14, justifyContent: 'center' },
-  tag: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.pill, borderWidth: 1, borderColor: '#2A323C', backgroundColor: '#12171E' },
+  tag: { paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.fieldBorder, backgroundColor: colors.field },
   tagOn: { borderColor: colors.orange, backgroundColor: 'rgba(255,122,26,0.1)' },
   tagText: { color: colors.muted, fontSize: 13, fontWeight: '600' },
-});
+}));

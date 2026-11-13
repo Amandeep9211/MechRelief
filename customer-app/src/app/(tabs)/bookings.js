@@ -3,7 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CATEGORIES } from '../../constants/categories';
-import { colors, radius } from '../../constants/theme';
+import { colors, radius, themed, useTheme } from '../../constants/theme';
 import { useApp } from '../../state/AppState';
 import { money } from '../../utils/format';
 import { Page, Header, Pill, Empty, Button } from '../../components/ui';
@@ -12,6 +12,7 @@ const TABS = [['active', 'Active'], ['completed', 'Completed'], ['cancelled', 'C
 
 // Bookings tab: Active (chalti hui), Completed, Cancelled. Card dabane par detail khulti hai.
 export default function Bookings() {
+  useTheme();
   const router = useRouter();
   const { job, history } = useApp();
   const [tab, setTab] = useState('active');
@@ -25,7 +26,7 @@ export default function Bookings() {
       <View style={s.tabs}>
         {TABS.map(([k, label]) => (
           <Pressable key={k} onPress={() => setTab(k)} style={[s.tab, tab === k && s.tabOn]}>
-            <Text style={[s.tabText, tab === k && { color: '#fff' }]}>{label}</Text>
+            <Text style={[s.tabText, tab === k && { color: colors.onAccent }]}>{label}</Text>
           </Pressable>
         ))}
       </View>
@@ -63,7 +64,7 @@ export default function Bookings() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   tabs: { flexDirection: 'row', backgroundColor: colors.card, borderRadius: radius.pill, padding: 4, borderWidth: 1, borderColor: colors.border, marginBottom: 14 },
   tab: { flex: 1, height: 38, borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },
   tabOn: { backgroundColor: colors.orange },
@@ -73,4 +74,4 @@ const s = StyleSheet.create({
   title: { color: colors.text, fontSize: 15.5, fontWeight: '700' },
   meta: { color: colors.muted, fontSize: 12 },
   total: { color: colors.text, fontSize: 14, fontWeight: '800' },
-});
+}));

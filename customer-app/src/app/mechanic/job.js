@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../../constants/theme';
+import { colors, radius, themed, useTheme } from '../../constants/theme';
 import { DEMO_JOB_CODE } from '../../data/mock';
 import { useApp } from '../../state/AppState';
 import { money } from '../../utils/format';
@@ -14,6 +14,7 @@ const IDX = { enroute: 1, verify: 2, working: 3, collect: 4, done: 5 };
 
 // Worker ki chalti job: raaste mein > pohonch gaya (job code) > kaam > cash collect (dual confirmation) > khatam.
 export default function WorkerJob() {
+  useTheme();
   const router = useRouter();
   const { wJob: j, setWJob, finishWorkerJob } = useApp();
   const [mismatchOpen, setMismatchOpen] = useState(false);
@@ -32,7 +33,7 @@ export default function WorkerJob() {
     return (
       <Page footer={<Button title="Back to Dashboard" onPress={() => router.replace('/mechanic')} />}>
         <View style={s.center}>
-          <View style={s.tick}><Icon name="check" size={44} color="#fff" /></View>
+          <View style={s.tick}><Icon name="check" size={44} color={colors.onAccent} /></View>
           <Text style={s.title}>Job completed</Text>
           <Text style={s.sub}>Payment was confirmed by you and the customer. The customer will now rate the service.</Text>
         </View>
@@ -121,17 +122,17 @@ export default function WorkerJob() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   center: { alignItems: 'center', paddingTop: 20 },
   tick: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.green, alignItems: 'center', justifyContent: 'center' },
   title: { color: colors.text, fontSize: 26, fontWeight: '800', marginTop: 16 },
-  sub: { color: '#AAB4C0', fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 10 },
+  sub: { color: colors.soft, fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 10 },
   stageCard: { marginTop: 14, alignItems: 'center', borderColor: 'rgba(255,122,26,0.4)' },
   stageTitle: { color: colors.text, fontSize: 18, fontWeight: '800', marginTop: 10, textAlign: 'center' },
   stageSub: { color: colors.muted, fontSize: 13, textAlign: 'center', marginTop: 8, lineHeight: 19 },
   codeRow: { flexDirection: 'row', gap: 10, marginTop: 16 },
-  codeCell: { width: 54, height: 64, borderRadius: 14, backgroundColor: '#12171E', borderWidth: 1, borderColor: 'rgba(255,122,26,0.45)', alignItems: 'center', justifyContent: 'center' },
+  codeCell: { width: 54, height: 64, borderRadius: 14, backgroundColor: colors.field, borderWidth: 1, borderColor: 'rgba(255,122,26,0.45)', alignItems: 'center', justifyContent: 'center' },
   codeChar: { color: colors.text, fontSize: 32, fontWeight: '800' },
-  cash: { color: colors.orange, fontSize: 38, fontWeight: '800', marginTop: 8 },
+  cash: { color: colors.orangeText, fontSize: 38, fontWeight: '800', marginTop: 8 },
   progress: { color: colors.text, fontSize: 17, fontWeight: '700' },
-});
+}));

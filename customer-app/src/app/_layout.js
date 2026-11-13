@@ -1,16 +1,26 @@
 import { useState } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { colors } from '../constants/theme';
+import { colors, useTheme, ThemeProvider } from '../constants/theme';
 import SplashScreen from '../components/SplashScreen';
 import { AppProvider } from '../state/AppState';
 
 // Root layout: poori app ka "frame". Stack = screens ek ke upar ek (push/pop).
 // Har app launch par pehle animated splash chalti hai, uske baad Stack (Welcome) aata hai.
-// AppProvider = poori app ki shared yaaddasht (user, chalti request, history).
+// ThemeProvider = dark/light theme ki yaaddasht. AppProvider = baaki shared yaaddasht (user, chalti request, history).
 export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <Shell />
+    </ThemeProvider>
+  );
+}
+
+function Shell() {
+  const { isLight } = useTheme();
   const [splashDone, setSplashDone] = useState(false);
 
+  // Splash hamesha dark rehti hai (brand intro), uske baad chuna hua theme lagta hai.
   if (!splashDone) {
     return (
       <>
@@ -22,7 +32,7 @@ export default function RootLayout() {
 
   return (
     <AppProvider>
-      <StatusBar style="light" />
+      <StatusBar style={isLight ? 'dark' : 'light'} />
       <Stack
         screenOptions={{
           headerShown: false,

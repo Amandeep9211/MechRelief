@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { CATEGORIES } from '../../constants/categories';
-import { colors, radius } from '../../constants/theme';
+import { colors, radius, themed, useTheme } from '../../constants/theme';
 import Logo from '../../components/Logo';
 import { useApp } from '../../state/AppState';
 import { money } from '../../utils/format';
@@ -16,6 +16,7 @@ import { money } from '../../utils/format';
 const ROWS = [CATEGORIES.slice(0, 4), CATEGORIES.slice(4, 8), CATEGORIES.slice(8)];
 
 export default function Home() {
+  useTheme();
   const router = useRouter();
   const { job, notifications } = useApp();
   const hasUnread = notifications.some((n) => n.unread);
@@ -30,7 +31,7 @@ export default function Home() {
           <View style={{ flex: 1 }}>
             <Logo width={150} />
             <Text style={styles.sub}>
-              Repairs <Text style={{ color: colors.orange }}>wherever you are.</Text>
+              Repairs <Text style={{ color: colors.orangeText }}>wherever you are.</Text>
             </Text>
           </View>
           <Pressable style={styles.bellWrap} onPress={() => router.push('/notifications')} hitSlop={8}>
@@ -43,7 +44,7 @@ export default function Home() {
         <View style={styles.hero}>
           <Image source={require('../../../assets/welcome-hero.jpg')} style={styles.heroImg} resizeMode="cover" />
           <LinearGradient
-            colors={[colors.card, 'rgba(20,24,29,0.92)', 'rgba(20,24,29,0)']}
+            colors={[colors.card, colors.glass, colors.cardClear]}
             locations={[0, 0.42, 0.85]}
             start={{ x: 0, y: 0.5 }}
             end={{ x: 1, y: 0.5 }}
@@ -52,12 +53,12 @@ export default function Home() {
           <View style={styles.heroText}>
             <Text style={styles.heroTag}>ON-DEMAND</Text>
             <Text style={styles.heroTitle}>
-              Professional{'\n'}Mechanics{'\n'}at <Text style={{ color: colors.orange }}>Your Doorstep</Text>
+              Professional{'\n'}Mechanics{'\n'}at <Text style={{ color: colors.orangeText }}>Your Doorstep</Text>
             </Text>
             <Text style={styles.heroSub}>Quick  ·  Reliable  ·  Affordable</Text>
             <Pressable style={styles.heroBtn} onPress={() => openBooking('general')}>
               <Text style={styles.heroBtnText}>Book a Mechanic</Text>
-              <MaterialCommunityIcons name="arrow-right" size={18} color="#fff" />
+              <MaterialCommunityIcons name="arrow-right" size={18} color={colors.onAccent} />
             </Pressable>
           </View>
         </View>
@@ -103,8 +104,8 @@ export default function Home() {
                 <MaterialCommunityIcons name="chevron-right" size={20} color={colors.text} />
               </View>
               <View style={styles.reqLine}>
-                <MaterialCommunityIcons name="map-marker" size={14} color="#4DA3FF" />
-                <Text style={[styles.reqText, { color: '#4DA3FF' }]} numberOfLines={1}>{job.location}</Text>
+                <MaterialCommunityIcons name="map-marker" size={14} color={colors.blue} />
+                <Text style={[styles.reqText, { color: colors.blue }]} numberOfLines={1}>{job.location}</Text>
               </View>
             </View>
           </Pressable>
@@ -120,7 +121,7 @@ export default function Home() {
 }
 
 const ROW_GAP = 10;
-const styles = StyleSheet.create({
+const styles = themed((colors) => ({
   flex: { flex: 1, backgroundColor: colors.bg },
   content: { padding: 16, paddingBottom: 130 }, // floating navbar ke neeche content na chhupe
 
@@ -140,7 +141,7 @@ const styles = StyleSheet.create({
   },
   heroImg: { position: 'absolute', right: 0, top: 0, height: '100%', width: 270 },
   heroText: { flex: 1, padding: 16, justifyContent: 'center', gap: 5, maxWidth: '65%' },
-  heroTag: { color: colors.orange, fontSize: 10.5, fontWeight: '700', letterSpacing: 1.2 },
+  heroTag: { color: colors.orangeText, fontSize: 10.5, fontWeight: '700', letterSpacing: 1.2 },
   heroTitle: { color: colors.text, fontSize: 21, fontWeight: '800', lineHeight: 25 },
   heroSub: { color: colors.muted, fontSize: 11 },
   heroBtn: {
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start', height: 38, paddingHorizontal: 16, borderRadius: radius.pill,
     backgroundColor: colors.orange,
   },
-  heroBtnText: { color: '#fff', fontWeight: '700', fontSize: 14 },
+  heroBtnText: { color: colors.onAccent, fontWeight: '700', fontSize: 14 },
 
   section: { color: colors.text, fontSize: 18, fontWeight: '700', marginTop: 22, marginBottom: 12 },
   row: { flexDirection: 'row', gap: ROW_GAP },
@@ -177,4 +178,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.greenSoft,
   },
   statusText: { color: colors.green, fontSize: 11, fontWeight: '600' },
-});
+}));

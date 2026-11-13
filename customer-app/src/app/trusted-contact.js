@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { Page, Header, Button, Input, FieldLabel } from '../components/ui';
 
 export default function TrustedContact() {
+  useTheme();
   const router = useRouter();
   const { user, setUser } = useApp();
   const [name, setName] = useState(user.trusted.name);
@@ -35,8 +36,8 @@ export default function TrustedContact() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   info: { flexDirection: 'row', gap: 12, padding: 14, borderRadius: radius.md, backgroundColor: 'rgba(255,122,26,0.08)', borderWidth: 1, borderColor: 'rgba(255,122,26,0.25)', marginBottom: 6 },
-  infoText: { flex: 1, color: '#C3CAD2', fontSize: 13.5, lineHeight: 19 },
+  infoText: { flex: 1, color: colors.soft2, fontSize: 13.5, lineHeight: 19 },
   err: { color: colors.red, fontSize: 13, marginTop: 12 },
-});
+}));

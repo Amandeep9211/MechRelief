@@ -1,13 +1,14 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { money } from '../utils/format';
 import { Page, Button, Card, Row, Divider, Avatar, Pill } from '../components/ui';
 
 // Payment ke baad: request confirm, worker ka naam, job code, aur agar worker busy ho to queue ki maloomat.
 export default function JobConfirmed() {
+  useTheme();
   const router = useRouter();
   const { job } = useApp();
 
@@ -31,7 +32,7 @@ export default function JobConfirmed() {
       }
     >
       <View style={s.hero}>
-        <View style={s.tick}><Icon name="check" size={44} color="#fff" /></View>
+        <View style={s.tick}><Icon name="check" size={44} color={colors.onAccent} /></View>
         <Text style={s.title}>{queued ? 'Request Placed' : 'Request Confirmed'}</Text>
         <Text style={s.sub}>
           {queued
@@ -59,7 +60,7 @@ export default function JobConfirmed() {
           <View style={{ flex: 1 }}>
             <Text style={s.wName}>{job.worker.name}</Text>
             <Text style={s.wSub}>{job.worker.role} ({job.worker.code})</Text>
-            <View style={s.rating}><Icon name="star" size={14} color="#FFB020" /><Text style={s.ratingText}>{job.worker.rating}  ·  {job.worker.jobs} jobs</Text></View>
+            <View style={s.rating}><Icon name="star" size={14} color={colors.amber} /><Text style={s.ratingText}>{job.worker.rating}  ·  {job.worker.jobs} jobs</Text></View>
           </View>
           <Pill text="Verified" tone="green" icon="shield-check" />
         </View>
@@ -84,27 +85,27 @@ export default function JobConfirmed() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   hero: { alignItems: 'center', paddingVertical: 14 },
   tick: { width: 84, height: 84, borderRadius: 42, backgroundColor: colors.green, alignItems: 'center', justifyContent: 'center' },
   title: { color: colors.text, fontSize: 26, fontWeight: '800', marginTop: 16 },
-  sub: { color: '#AAB4C0', fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 10 },
-  id: { color: colors.orange, fontSize: 13, fontWeight: '700', marginTop: 10 },
+  sub: { color: colors.soft, fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 10 },
+  id: { color: colors.orangeText, fontSize: 13, fontWeight: '700', marginTop: 10 },
   queue: { borderColor: 'rgba(255,122,26,0.4)', backgroundColor: 'rgba(255,122,26,0.07)', marginTop: 10 },
   queueRow: { flexDirection: 'row', gap: 10 },
   queueBox: { flex: 1, alignItems: 'center', paddingVertical: 8 },
-  queueNum: { color: colors.orange, fontSize: 28, fontWeight: '800' },
+  queueNum: { color: colors.orangeText, fontSize: 28, fontWeight: '800' },
   queueLbl: { color: colors.muted, fontSize: 12, marginTop: 2 },
-  queueNote: { color: '#C3CAD2', fontSize: 12.5, textAlign: 'center', marginTop: 8, lineHeight: 18 },
+  queueNote: { color: colors.soft2, fontSize: 12.5, textAlign: 'center', marginTop: 8, lineHeight: 18 },
   workerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   wName: { color: colors.text, fontSize: 17, fontWeight: '700' },
   wSub: { color: colors.muted, fontSize: 12.5, marginTop: 2 },
   rating: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
   ratingText: { color: colors.muted, fontSize: 12.5 },
-  codeBox: { marginTop: 14, padding: 18, borderRadius: radius.lg, backgroundColor: '#12171E', borderWidth: 1, borderColor: 'rgba(255,122,26,0.45)', alignItems: 'center' },
-  codeLabel: { color: colors.orange, fontSize: 12, fontWeight: '800', letterSpacing: 2 },
+  codeBox: { marginTop: 14, padding: 18, borderRadius: radius.lg, backgroundColor: colors.field, borderWidth: 1, borderColor: 'rgba(255,122,26,0.45)', alignItems: 'center' },
+  codeLabel: { color: colors.orangeText, fontSize: 12, fontWeight: '800', letterSpacing: 2 },
   codeRow: { flexDirection: 'row', gap: 10, marginTop: 12 },
   codeCell: { width: 54, height: 64, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' },
   codeChar: { color: colors.text, fontSize: 32, fontWeight: '800' },
   codeNote: { color: colors.muted, fontSize: 12.5, textAlign: 'center', marginTop: 12, lineHeight: 18 },
-});
+}));

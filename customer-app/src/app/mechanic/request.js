@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../../constants/theme';
+import { colors, radius, themed, useTheme } from '../../constants/theme';
 import { useApp } from '../../state/AppState';
 import { money } from '../../utils/format';
 import MapPreview from '../../components/MapPreview';
@@ -12,6 +12,7 @@ const ETAS = [10, 15, 20, 30];
 
 // Direct assignment (proposal): request seedha is worker ko aati hai; worker "acknowledge" karke ETA batata hai.
 export default function Request() {
+  useTheme();
   const router = useRouter();
   const { wRequest: r, acceptRequest, rejectRequest } = useApp();
   const [eta, setEta] = useState(15);
@@ -63,7 +64,7 @@ export default function Request() {
       <View style={s.etas}>
         {ETAS.map((m) => (
           <Pressable key={m} onPress={() => setEta(m)} style={[s.eta, eta === m && s.etaOn]}>
-            <Text style={[s.etaNum, eta === m && { color: colors.orange }]}>{m}</Text>
+            <Text style={[s.etaNum, eta === m && { color: colors.orangeText }]}>{m}</Text>
             <Text style={s.etaLbl}>min</Text>
           </Pressable>
         ))}
@@ -80,14 +81,14 @@ export default function Request() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   title: { color: colors.muted, fontSize: 13, fontWeight: '700' },
   issue: { color: colors.text, fontSize: 21, fontWeight: '800', marginTop: 4 },
-  note: { color: '#AAB4C0', fontSize: 13.5, fontStyle: 'italic', marginTop: 6, lineHeight: 19 },
+  note: { color: colors.soft, fontSize: 13.5, fontStyle: 'italic', marginTop: 6, lineHeight: 19 },
   etas: { flexDirection: 'row', gap: 10 },
-  eta: { flex: 1, paddingVertical: 14, alignItems: 'center', borderRadius: radius.md, backgroundColor: '#12171E', borderWidth: 1, borderColor: '#2A323C' },
+  eta: { flex: 1, paddingVertical: 14, alignItems: 'center', borderRadius: radius.md, backgroundColor: colors.field, borderWidth: 1, borderColor: colors.fieldBorder },
   etaOn: { borderColor: colors.orange, backgroundColor: 'rgba(255,122,26,0.1)' },
   etaNum: { color: colors.text, fontSize: 22, fontWeight: '800' },
   etaLbl: { color: colors.muted, fontSize: 11.5 },
-  hint: { color: '#6E7782', fontSize: 12, marginTop: 10 },
-});
+  hint: { color: colors.faint, fontSize: 12, marginTop: 10 },
+}));

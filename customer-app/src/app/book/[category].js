@@ -4,7 +4,7 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { CATEGORIES } from '../../constants/categories';
 import { CONFIG, priceFor, EMERGENCY_CHARGE, DESCRIPTION_REQUIRED } from '../../data/categoryConfig';
-import { colors, radius } from '../../constants/theme';
+import { colors, radius, themed, useTheme } from '../../constants/theme';
 import { useApp } from '../../state/AppState';
 import { money } from '../../utils/format';
 import MapPreview from '../../components/MapPreview';
@@ -15,6 +15,7 @@ import {
 // Proposal: "ek hi reusable booking screen". Fields har category ke CONFIG se aate hain.
 // Universal fields (car + location) hamesha, phir category ke fields, phir price breakdown.
 export default function Booking() {
+  useTheme();
   const { category, emergency } = useLocalSearchParams();
   const router = useRouter();
   const { draft, startDraft, setDraft, user, job } = useApp();
@@ -167,13 +168,13 @@ export default function Booking() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   catIcon: { width: 42, height: 42, borderRadius: 21, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,122,26,0.12)' },
   hint: { color: colors.muted, fontSize: 13.5, lineHeight: 19 },
   banner: { flexDirection: 'row', gap: 10, padding: 12, borderRadius: radius.md, backgroundColor: 'rgba(255,122,26,0.1)', borderWidth: 1, borderColor: 'rgba(255,122,26,0.35)', marginBottom: 12 },
   bannerText: { flex: 1, color: colors.text, fontSize: 13, lineHeight: 18 },
   gps: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 10, alignSelf: 'flex-start' },
-  gpsText: { color: colors.orange, fontSize: 14, fontWeight: '600' },
+  gpsText: { color: colors.orangeText, fontSize: 14, fontWeight: '600' },
   info: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   infoText: { color: colors.text, fontSize: 14, flex: 1 },
   checkRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
@@ -182,11 +183,11 @@ const s = StyleSheet.create({
   noteBox: { flexDirection: 'row', gap: 8, alignItems: 'flex-start', marginTop: 12, padding: 12, borderRadius: radius.md, backgroundColor: 'rgba(255,122,26,0.1)', borderWidth: 1, borderColor: 'rgba(255,122,26,0.35)' },
   noteText: { flex: 1, color: colors.text, fontSize: 12.5, lineHeight: 18 },
   split: { flexDirection: 'row', gap: 10, marginTop: 12 },
-  splitBox: { flex: 1, padding: 14, borderRadius: radius.md, backgroundColor: '#12171E', borderWidth: 1, borderColor: '#2A323C' },
-  splitNum: { color: colors.orange, fontSize: 13, fontWeight: '800' },
+  splitBox: { flex: 1, padding: 14, borderRadius: radius.md, backgroundColor: colors.field, borderWidth: 1, borderColor: colors.fieldBorder },
+  splitNum: { color: colors.orangeText, fontSize: 13, fontWeight: '800' },
   splitMain: { color: colors.text, fontSize: 19, fontWeight: '800', marginTop: 4 },
   splitSub: { color: colors.muted, fontSize: 11.5, marginTop: 3 },
   footTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 },
   footLabel: { color: colors.muted, fontSize: 12 },
   footTotal: { color: colors.text, fontSize: 22, fontWeight: '800' },
-});
+}));

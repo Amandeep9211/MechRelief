@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { colors } from '../constants/theme';
+import { colors, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { Page, Header, Button, Input, FieldLabel, Avatar } from '../components/ui';
 
 export default function EditProfile() {
+  useTheme();
   const router = useRouter();
   const { user, setUser } = useApp();
   const [name, setName] = useState(user.name);
@@ -33,7 +34,7 @@ export default function EditProfile() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   note: { color: colors.muted, fontSize: 12, marginTop: 6 },
   err: { color: colors.red, fontSize: 13, marginTop: 12 },
-});
+}));

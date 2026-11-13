@@ -2,13 +2,14 @@ import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { CATEGORIES } from '../constants/categories';
-import { colors } from '../constants/theme';
+import { colors, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { money } from '../utils/format';
 import { Page, Header, Card, Row, Divider, Pill, Stars, Button, Avatar } from '../components/ui';
 
 // Purani (completed / cancelled) booking ki tafseel.
 export default function BookingDetail() {
+  useTheme();
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { history } = useApp();
@@ -53,7 +54,7 @@ export default function BookingDetail() {
         <Row label="Advance (15%)" value={money(advance)} />
         {completed ? <Row label="Paid in cash (85%)" value={money(b.total - advance)} /> : null}
         {!completed ? (
-          <Row label="Advance refund" value={b.refund ? `${money(b.refund)} refunded` : 'Not refundable'} color={b.refund ? colors.green : '#FF6B66'} />
+          <Row label="Advance refund" value={b.refund ? `${money(b.refund)} refunded` : 'Not refundable'} color={b.refund ? colors.green : colors.redText} />
         ) : null}
       </Card>
 
@@ -67,7 +68,7 @@ export default function BookingDetail() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   top: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   icon: { width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,122,26,0.12)' },
   title: { color: colors.text, fontSize: 18, fontWeight: '800' },
@@ -76,4 +77,4 @@ const s = StyleSheet.create({
   wName: { color: colors.text, fontSize: 16, fontWeight: '700' },
   rl: { color: colors.muted, fontSize: 12.5, fontWeight: '700', marginBottom: 6 },
   rv: { color: colors.text, fontSize: 14, lineHeight: 20 },
-});
+}));

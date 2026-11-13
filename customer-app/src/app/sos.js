@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { Page, Header, Button, Card, Row, Pill } from '../components/ui';
 
 // SOS (proposal): admin ko in-app alert + trusted contact ko live location ka SMS.
 export default function Sos() {
+  useTheme();
   const router = useRouter();
   const { reason } = useLocalSearchParams();
   const { user, job } = useApp();
@@ -21,7 +22,7 @@ export default function Sos() {
         footer={<Button title="Back to my request" onPress={() => router.back()} />}
       >
         <View style={s.center}>
-          <View style={[s.circle, { backgroundColor: colors.green }]}><Icon name="check" size={50} color="#fff" /></View>
+          <View style={[s.circle, { backgroundColor: colors.green }]}><Icon name="check" size={50} color={colors.onAccent} /></View>
           <Text style={s.title}>Alert sent</Text>
           <Text style={s.sub}>Help is being arranged. Stay where you are, in a safe place if you can.</Text>
         </View>
@@ -48,7 +49,7 @@ export default function Sos() {
 
         <Pressable onPress={() => setSent(true)} style={({ pressed }) => [s.big, pressed && { transform: [{ scale: 0.97 }] }]}>
           <View style={s.ring2}><View style={s.ring1}><View style={s.core}>
-            <Icon name="alarm-light" size={54} color="#fff" />
+            <Icon name="alarm-light" size={54} color={colors.onAccent} />
             <Text style={s.sosText}>SOS</Text>
           </View></View></View>
         </Pressable>
@@ -70,16 +71,16 @@ export default function Sos() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   center: { alignItems: 'center', paddingTop: 10 },
   title: { color: colors.text, fontSize: 26, fontWeight: '800', marginTop: 14, textAlign: 'center' },
-  sub: { color: '#AAB4C0', fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 12 },
+  sub: { color: colors.soft, fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 12 },
   circle: { width: 96, height: 96, borderRadius: 48, alignItems: 'center', justifyContent: 'center' },
   big: { marginTop: 28 },
   ring2: { width: 250, height: 250, borderRadius: 125, backgroundColor: 'rgba(229,50,45,0.1)', alignItems: 'center', justifyContent: 'center' },
   ring1: { width: 204, height: 204, borderRadius: 102, backgroundColor: 'rgba(229,50,45,0.2)', alignItems: 'center', justifyContent: 'center' },
   core: { width: 160, height: 160, borderRadius: 80, backgroundColor: colors.red, alignItems: 'center', justifyContent: 'center', shadowColor: colors.red, shadowOpacity: 0.6, shadowRadius: 24, elevation: 14 },
-  sosText: { color: '#fff', fontSize: 24, fontWeight: '900', letterSpacing: 3, marginTop: 2 },
+  sosText: { color: colors.onAccent, fontSize: 24, fontWeight: '900', letterSpacing: 3, marginTop: 2 },
   tap: { color: colors.muted, fontSize: 13, marginTop: 12 },
   small: { color: colors.muted, fontSize: 12.5, textAlign: 'center', marginTop: 14, lineHeight: 18 },
   contact: { flexDirection: 'row', alignItems: 'center', gap: 12 },
@@ -87,5 +88,5 @@ const s = StyleSheet.create({
   cLabel: { color: colors.muted, fontSize: 12 },
   cName: { color: colors.text, fontSize: 16, fontWeight: '700' },
   cPhone: { color: colors.muted, fontSize: 13 },
-  change: { color: colors.orange, fontSize: 14, fontWeight: '700' },
-});
+  change: { color: colors.orangeText, fontSize: 14, fontWeight: '700' },
+}));

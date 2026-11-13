@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../../../constants/theme';
+import { colors, radius, themed, useTheme } from '../../../constants/theme';
 import { WORKER } from '../../../data/mock';
 import { useApp } from '../../../state/AppState';
 import { money } from '../../../utils/format';
@@ -11,6 +11,7 @@ const STAGE = { enroute: 'On the way', verify: 'Verify job code', working: 'In p
 
 // Mechanic Dashboard: availability, aaj ki kamai, nayi request, chalti job, queue.
 export default function Dashboard() {
+  useTheme();
   const router = useRouter();
   const { wAvailable, setWAvailable, wRequest, wQueue, wJob, wStats } = useApp();
   const queue = [...wQueue].sort((a, b) => Number(b.emergency) - Number(a.emergency)); // Emergency pehle
@@ -39,7 +40,7 @@ export default function Dashboard() {
       <View style={s.stats}>
         <View style={s.stat}><Text style={s.num}>{wStats.todayJobs}</Text><Text style={s.lbl}>Jobs today</Text></View>
         <View style={s.stat}><Text style={s.num}>{money(wStats.todayEarning)}</Text><Text style={s.lbl}>Earned today</Text></View>
-        <View style={s.stat}><View style={s.rate}><Icon name="star" size={16} color="#FFB020" /><Text style={s.num}>{wStats.rating}</Text></View><Text style={s.lbl}>Rating</Text></View>
+        <View style={s.stat}><View style={s.rate}><Icon name="star" size={16} color={colors.amber} /><Text style={s.num}>{wStats.rating}</Text></View><Text style={s.lbl}>Rating</Text></View>
       </View>
 
       {/* Chalti hui job */}
@@ -111,6 +112,7 @@ export default function Dashboard() {
 }
 
 function Card2({ icon, text }) {
+  useTheme();
   return (
     <View style={[s.card, { justifyContent: 'center' }]}>
       <Icon name={icon} size={26} color={colors.muted} />
@@ -119,7 +121,7 @@ function Card2({ icon, text }) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   head: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 16, paddingTop: 14, paddingBottom: 6 },
   hello: { color: colors.text, fontSize: 22, fontWeight: '800' },
   role: { color: colors.muted, fontSize: 13, marginTop: 2 },
@@ -136,9 +138,9 @@ const s = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   reqId: { color: colors.muted, fontSize: 12 },
   earnLbl: { color: colors.muted, fontSize: 11 },
-  earn: { color: colors.orange, fontSize: 18, fontWeight: '800' },
+  earn: { color: colors.orangeText, fontSize: 18, fontWeight: '800' },
   pos: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.cardAlt, borderWidth: 1, borderColor: colors.border },
-  posText: { color: colors.orange, fontWeight: '800' },
+  posText: { color: colors.orangeText, fontWeight: '800' },
   sortNote: { color: colors.muted, fontSize: 12 },
-  autoNote: { color: '#6E7782', fontSize: 12, lineHeight: 17, marginTop: 2 },
-});
+  autoNote: { color: colors.faint, fontSize: 12, lineHeight: 17, marginTop: 2 },
+}));

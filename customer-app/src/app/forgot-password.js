@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { Page, Header, Button, Input, FieldLabel } from '../components/ui';
 
 // Forgot password, step 1: phone number do, SMS code aayega (verify-otp screen), phir naya password (reset-password).
 export default function ForgotPassword() {
+  useTheme();
   const router = useRouter();
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
@@ -51,18 +52,18 @@ export default function ForgotPassword() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   hero: { alignItems: 'center', paddingVertical: 10, marginBottom: 6 },
   iconWrap: { width: 88, height: 88, borderRadius: 44, backgroundColor: 'rgba(255,122,26,0.12)', alignItems: 'center', justifyContent: 'center' },
   title: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: 16 },
-  sub: { color: '#AAB4C0', fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 8 },
+  sub: { color: colors.soft, fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 21, paddingHorizontal: 8 },
   err: { color: colors.red, fontSize: 13, marginTop: 10 },
   steps: { marginTop: 26, padding: 16, borderRadius: radius.lg, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, gap: 12 },
   stepsTitle: { color: colors.text, fontSize: 15, fontWeight: '700' },
   step: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   stepNum: { width: 26, height: 26, borderRadius: 13, backgroundColor: 'rgba(255,122,26,0.14)', alignItems: 'center', justifyContent: 'center' },
-  stepNumText: { color: colors.orange, fontWeight: '800', fontSize: 13 },
-  stepText: { color: '#C3CAD2', fontSize: 14, flex: 1 },
+  stepNumText: { color: colors.orangeText, fontWeight: '800', fontSize: 13 },
+  stepText: { color: colors.soft2, fontSize: 14, flex: 1 },
   back: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 24 },
-  backText: { color: colors.orange, fontSize: 14.5, fontWeight: '600' },
-});
+  backText: { color: colors.orangeText, fontSize: 14.5, fontWeight: '600' },
+}));

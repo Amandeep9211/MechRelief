@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import Logo from '../components/Logo';
 
 const FEATURES = [
@@ -15,24 +15,25 @@ const FEATURES = [
 
 // Pehli screen (Welcome). File ka naam index.js => route "/"
 export default function Welcome() {
+  useTheme();
   const router = useRouter();
 
   return (
     <View style={styles.flex}>
-      <LinearGradient colors={['#1A212A', colors.bg]} style={StyleSheet.absoluteFill} />
+      <LinearGradient colors={[colors.bgTop, colors.bg]} style={StyleSheet.absoluteFill} />
       <SafeAreaView style={styles.flex}>
         {/* Logo, naam, tagline */}
         <View style={styles.top}>
           <Logo width={270} />
           <Text style={[styles.tagline, { marginTop: 14 }]}>Repairs</Text>
-          <Text style={[styles.tagline, { color: colors.orange, marginTop: 2 }]}>wherever you are.</Text>
+          <Text style={[styles.tagline, { color: colors.orangeText, marginTop: 2 }]}>wherever you are.</Text>
         </View>
 
         {/* Photo: upar aur neeche se background mein ghul jati hai */}
         <View style={styles.photoWrap}>
           <Image source={require('../../assets/welcome-hero.jpg')} style={styles.photo} resizeMode="cover" />
-          <LinearGradient colors={[colors.bg, 'rgba(11,13,16,0)']} style={[styles.fade, { top: 0 }]} pointerEvents="none" />
-          <LinearGradient colors={['rgba(11,13,16,0)', colors.bg]} style={[styles.fade, { bottom: 0 }]} pointerEvents="none" />
+          <LinearGradient colors={[colors.bg, colors.bgClear]} style={[styles.fade, { top: 0 }]} pointerEvents="none" />
+          <LinearGradient colors={[colors.bgClear, colors.bg]} style={[styles.fade, { bottom: 0 }]} pointerEvents="none" />
         </View>
 
         {/* Features */}
@@ -52,14 +53,14 @@ export default function Welcome() {
           style={({ pressed }) => [styles.cta, pressed && { opacity: 0.85 }]}
         >
           <Text style={styles.ctaText}>Get Started</Text>
-          <MaterialCommunityIcons name="arrow-right" size={22} color="#fff" />
+          <MaterialCommunityIcons name="arrow-right" size={22} color={colors.onAccent} />
         </Pressable>
       </SafeAreaView>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed((colors) => ({
   flex: { flex: 1, backgroundColor: colors.bg },
   top: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24 },
   logo: { width: 110, height: 90, alignItems: 'center', justifyContent: 'flex-end' },
@@ -85,5 +86,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 16, marginTop: 12, marginBottom: 12, height: 54, borderRadius: radius.md,
     backgroundColor: colors.orange,
   },
-  ctaText: { color: '#fff', fontSize: 18, fontWeight: '700' },
-});
+  ctaText: { color: colors.onAccent, fontSize: 18, fontWeight: '700' },
+}));

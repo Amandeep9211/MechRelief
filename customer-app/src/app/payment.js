@@ -4,13 +4,14 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { CATEGORIES } from '../constants/categories';
 import { describeAnswers } from '../data/categoryConfig';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { money } from '../utils/format';
 import { Page, Header, Button, Card, SectionTitle, Row, Divider, Pill, Input, FieldLabel } from '../components/ui';
 
 // Advance payment: total ka 15% abhi online (JazzCash sandbox), baqi 85% cash kaam ke baad.
 export default function Payment() {
+  useTheme();
   const router = useRouter();
   const { draft, user, createJob } = useApp();
   const [phone, setPhone] = useState(user.phone);
@@ -88,13 +89,13 @@ export default function Payment() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   head: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   icon: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(255,122,26,0.12)' },
-  jc: { color: '#fff', fontWeight: '900', fontSize: 20 },
+  jc: { color: colors.onAccent, fontWeight: '900', fontSize: 20 },
   title: { color: colors.text, fontSize: 16, fontWeight: '700' },
   sub: { color: colors.muted, fontSize: 12.5, marginTop: 2 },
   priceNote: { color: colors.muted, fontSize: 12.5, lineHeight: 18, marginTop: 10 },
   note: { flexDirection: 'row', gap: 10, alignItems: 'center', marginTop: 16, padding: 12, borderRadius: radius.md, backgroundColor: colors.greenSoft },
-  noteText: { flex: 1, color: '#BFE8CF', fontSize: 12.5, lineHeight: 18 },
-});
+  noteText: { flex: 1, color: colors.greenText, fontSize: 12.5, lineHeight: 18 },
+}));

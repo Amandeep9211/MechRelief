@@ -1,16 +1,19 @@
 import { View, Image } from 'react-native';
+import { useTheme } from '../constants/theme';
 
 // Splash wala asli MechRelief logo (car + wordmark), static. width do, height khud nikal leta hai.
+// Wordmark ka "Mech" safed hai, isliye light theme mein uska dark version (kaale/neele "Mech") use hota hai.
 const LOGO = { width: 1330, height: 432 };
 const CAR = { left: 15, top: 0, width: 1131, height: 223 };
 const WORDMARK = { left: 0, top: 236, width: 1330, height: 196 };
 
 export default function Logo({ width = 240, style }) {
+  const { isLight } = useTheme();
   const k = width / LOGO.width;
   return (
     <View style={[{ width, height: LOGO.height * k }, style]}>
       <Image
-        source={require('../assets/images/mechrelief-wordmark.png')}
+        source={isLight ? require('../assets/images/mechrelief-wordmark-dark.png') : require('../assets/images/mechrelief-wordmark.png')}
         resizeMode="contain"
         style={{ position: 'absolute', left: WORDMARK.left * k, top: WORDMARK.top * k, width: WORDMARK.width * k, height: WORDMARK.height * k }}
       />

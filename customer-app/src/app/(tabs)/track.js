@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../../constants/theme';
+import { colors, radius, themed, useTheme } from '../../constants/theme';
 import { useApp } from '../../state/AppState';
 import { money } from '../../utils/format';
 import MapPreview from '../../components/MapPreview';
@@ -17,6 +17,7 @@ const PILL = {
 
 // Track tab: chalti hui request ka poora safar (queue > raaste mein > pohonch gaya > kaam > payment).
 export default function Track() {
+  useTheme();
   const router = useRouter();
   const { job, updateJob, cancelJob } = useApp();
   const [cancelOpen, setCancelOpen] = useState(false);
@@ -78,7 +79,7 @@ export default function Track() {
           {st === 'enroute' && (
             <View style={s.eta}>
               <Icon name="clock-fast" size={20} color={colors.orange} />
-              <Text style={s.etaText}>Arriving in <Text style={{ color: colors.orange, fontWeight: '800' }}>{job.etaMin} min</Text></Text>
+              <Text style={s.etaText}>Arriving in <Text style={{ color: colors.orangeText, fontWeight: '800' }}>{job.etaMin} min</Text></Text>
             </View>
           )}
         </>
@@ -91,7 +92,7 @@ export default function Track() {
           <View style={{ flex: 1 }}>
             <Text style={s.wName}>{job.worker.name}  <Icon name="shield-check" size={14} color={colors.green} /></Text>
             <Text style={s.wSub}>{job.worker.role} ({job.worker.code})</Text>
-            <View style={s.rating}><Icon name="star" size={13} color="#FFB020" /><Text style={s.wSub}>{job.worker.rating}  ·  {job.worker.jobs} jobs</Text></View>
+            <View style={s.rating}><Icon name="star" size={13} color={colors.amber} /><Text style={s.wSub}>{job.worker.rating}  ·  {job.worker.jobs} jobs</Text></View>
           </View>
           <CallButton compact phone={job.worker.phone} label={`Call ${job.worker.name}`} />
         </View>
@@ -133,7 +134,7 @@ export default function Track() {
           <Text style={s.vSub}>Both you and the worker confirm in the app. If the two do not match, the admin is alerted to sort it out.</Text>
           {job.mismatch ? (
             <View style={s.mismatch}>
-              <Icon name="alert-circle-outline" size={20} color="#FF6B66" />
+              <Icon name="alert-circle-outline" size={20} color={colors.redText} />
               <Text style={s.mismatchText}>Amounts do not match. This has been flagged to the admin as a dispute. You will be contacted.</Text>
             </View>
           ) : job.custPaid ? (
@@ -154,12 +155,12 @@ export default function Track() {
       {/* SOS aur cancel */}
       {st !== 'payment' && (
         <Pressable style={s.sos} onPress={() => router.push('/sos')}>
-          <View style={s.sosIcon}><Icon name="alarm-light" size={24} color="#fff" /></View>
+          <View style={s.sosIcon}><Icon name="alarm-light" size={24} color={colors.onAccent} /></View>
           <View style={{ flex: 1 }}>
             <Text style={s.sosTitle}>SOS Emergency</Text>
             <Text style={s.sosSub}>Alerts the admin and sends your live location to your trusted contact</Text>
           </View>
-          <Icon name="chevron-right" size={22} color="#FF6B66" />
+          <Icon name="chevron-right" size={22} color={colors.redText} />
         </Pressable>
       )}
       {(st === 'queued' || st === 'enroute') && (
@@ -187,6 +188,7 @@ export default function Track() {
 }
 
 function JobCode({ code, note, flat }) {
+  useTheme();
   return (
     <View style={[s.codeBox, flat && { backgroundColor: 'transparent', borderWidth: 0, marginTop: 8, padding: 0 }]}>
       {!flat && <Text style={s.codeLabel}>YOUR JOB CODE</Text>}
@@ -198,18 +200,18 @@ function JobCode({ code, note, flat }) {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   queue: { alignItems: 'center', borderColor: 'rgba(255,122,26,0.4)', backgroundColor: 'rgba(255,122,26,0.07)', paddingVertical: 22 },
   qTitle: { color: colors.text, fontSize: 21, fontWeight: '800', marginTop: 10 },
-  qSub: { color: '#C3CAD2', fontSize: 13.5, textAlign: 'center', marginTop: 8, lineHeight: 20 },
+  qSub: { color: colors.soft2, fontSize: 13.5, textAlign: 'center', marginTop: 8, lineHeight: 20 },
   eta: { flexDirection: 'row', alignItems: 'center', gap: 8, justifyContent: 'center', marginTop: 12 },
   etaText: { color: colors.text, fontSize: 15 },
   wRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   wName: { color: colors.text, fontSize: 16, fontWeight: '700' },
   wSub: { color: colors.muted, fontSize: 12.5, marginTop: 2 },
   rating: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 },
-  codeBox: { marginTop: 14, padding: 16, borderRadius: radius.lg, backgroundColor: '#12171E', borderWidth: 1, borderColor: 'rgba(255,122,26,0.45)', alignItems: 'center' },
-  codeLabel: { color: colors.orange, fontSize: 11.5, fontWeight: '800', letterSpacing: 2 },
+  codeBox: { marginTop: 14, padding: 16, borderRadius: radius.lg, backgroundColor: colors.field, borderWidth: 1, borderColor: 'rgba(255,122,26,0.45)', alignItems: 'center' },
+  codeLabel: { color: colors.orangeText, fontSize: 11.5, fontWeight: '800', letterSpacing: 2 },
   codeRow: { flexDirection: 'row', gap: 10, marginTop: 10 },
   codeCell: { width: 50, height: 58, borderRadius: 13, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' },
   codeChar: { color: colors.text, fontSize: 29, fontWeight: '800' },
@@ -222,12 +224,12 @@ const s = StyleSheet.create({
   waiting: { flexDirection: 'row', gap: 8, alignItems: 'center', marginTop: 12, padding: 12, borderRadius: radius.md, backgroundColor: 'rgba(255,122,26,0.1)' },
   waitText: { flex: 1, color: colors.text, fontSize: 13 },
   mismatch: { flexDirection: 'row', gap: 8, marginTop: 12, padding: 12, borderRadius: radius.md, backgroundColor: colors.redSoft },
-  mismatchText: { flex: 1, color: '#FFB3B0', fontSize: 13, lineHeight: 18 },
+  mismatchText: { flex: 1, color: colors.redText2, fontSize: 13, lineHeight: 18 },
   sos: { flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 18, padding: 14, borderRadius: radius.lg, backgroundColor: colors.redSoft, borderWidth: 1, borderColor: 'rgba(229,50,45,0.5)' },
   sosIcon: { width: 46, height: 46, borderRadius: 23, backgroundColor: colors.red, alignItems: 'center', justifyContent: 'center' },
-  sosTitle: { color: '#FF8A85', fontSize: 16, fontWeight: '800' },
-  sosSub: { color: '#D9A5A2', fontSize: 12, marginTop: 2, lineHeight: 16 },
-  demo: { marginTop: 22, padding: 14, borderRadius: radius.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: '#3A434D', gap: 6 },
+  sosTitle: { color: colors.redText2, fontSize: 16, fontWeight: '800' },
+  sosSub: { color: colors.redSub, fontSize: 12, marginTop: 2, lineHeight: 16 },
+  demo: { marginTop: 22, padding: 14, borderRadius: radius.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.border2, gap: 6 },
   demoTag: { color: colors.muted, fontSize: 11, fontWeight: '800', letterSpacing: 1.5 },
-  demoText: { color: '#6E7782', fontSize: 12, marginBottom: 6 },
-});
+  demoText: { color: colors.faint, fontSize: 12, marginBottom: 6 },
+}));

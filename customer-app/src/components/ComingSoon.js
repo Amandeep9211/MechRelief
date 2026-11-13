@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { colors } from '../constants/theme';
+import { colors, themed, useTheme } from '../constants/theme';
 
 // Un screens ke liye jo abhi banne baaki hain.
 export default function ComingSoon({ title, icon, note }) {
+  useTheme();
   return (
     <SafeAreaView style={styles.wrap}>
       <MaterialCommunityIcons name={icon} size={48} color={colors.orange} />
@@ -14,8 +15,8 @@ export default function ComingSoon({ title, icon, note }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed((colors) => ({
   wrap: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32, backgroundColor: colors.bg },
   title: { color: colors.text, fontSize: 22, fontWeight: '700', marginTop: 14 },
   note: { color: colors.muted, fontSize: 14, marginTop: 6, textAlign: 'center' },
-});
+}));

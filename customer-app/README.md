@@ -49,3 +49,11 @@ aayengi, screens ka design nahi badlega. Order: categories > login/signup (JWT) 
 - Call button: after booking, the customer can call the worker (Track tab) and the mechanic can call the customer (job screen). It opens the phone dialer (`tel:`). Phone numbers are sample data for now.
 - Home screen: borders removed from the service tiles, request icon, hero card and status pill.
 - Tabs slide left/right when you switch (customer and mechanic tab bars). See `src/components/tabTransition.js`.
+
+## Light theme (new)
+- App mein 3 theme options hain: **Light**, **Dark** aur **System** (phone ki apni light/dark setting follow karta hai, aur phone mein badalte hi app bhi badal jati hai). Default System hai. Chunne ke liye Profile > **Appearance** (customer aur mechanic dono mein). Choice yaad rehti hai (AsyncStorage).
+- Saare colours `src/constants/theme.js` mein hain: `dark` aur `light` palette, naam same, values alag. Screens mein hex code nahi, sirf `colors.card`, `colors.text` jaise naam likhte hain.
+- Naya style likhna ho to `StyleSheet.create({...})` ki jagah `themed((colors) => ({...}))` use karo, aur component ke shuru mein `useTheme();` likho. Is se theme badalte hi screen khud update hoti hai.
+- Light mein logo ka "Mech" kaala dikhane ke liye `src/assets/images/mechrelief-wordmark-dark.png` use hota hai.
+- Splash screen hamesha dark rehti hai (brand intro).
+- Naya package: `@react-native-async-storage/async-storage` (theme yaad rakhne ke liye). Purane folder mein `npm install` ek baar dobara chalana hoga.

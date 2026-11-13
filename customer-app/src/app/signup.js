@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import Logo from '../components/Logo';
 import { useApp } from '../state/AppState';
 
@@ -15,6 +15,7 @@ import { useApp } from '../state/AppState';
 
 // Ek input field (icon + text). Baar baar likhna na pade is liye alag component.
 function Field({ icon, name, focus, setFocus, right, ...props }) {
+  useTheme();
   return (
     <View style={[styles.input, focus === name && styles.inputFocus]}>
       <MaterialCommunityIcons name={icon} size={22} color={colors.orange} />
@@ -31,6 +32,7 @@ function Field({ icon, name, focus, setFocus, right, ...props }) {
 }
 
 export default function Signup() {
+  useTheme();
   const router = useRouter();
   const { user, setPending } = useApp();
   const [name, setName] = useState('');
@@ -70,7 +72,7 @@ export default function Signup() {
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.flex}>
-        <LinearGradient colors={['#141A22', colors.bg]} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.bgTop, colors.bg]} style={StyleSheet.absoluteFill} />
         <SafeAreaView style={styles.flex}>
           <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
             {/* Header: back button, logo, photo */}
@@ -78,12 +80,12 @@ export default function Signup() {
               <View style={styles.heroBox}>
                 <Image source={require('../../assets/login-hero.jpg')} style={styles.heroImg} resizeMode="cover" />
                 <LinearGradient
-                  colors={[colors.bg, 'rgba(11,13,16,0)']}
+                  colors={[colors.bg, colors.bgClear]}
                   locations={[0, 0.2]}
                   start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }}
                   style={StyleSheet.absoluteFill}
                 />
-                <LinearGradient colors={[colors.bg, 'rgba(11,13,16,0)']} style={styles.heroTopFade} />
+                <LinearGradient colors={[colors.bg, colors.bgClear]} style={styles.heroTopFade} />
               </View>
 
               <Pressable onPress={() => router.back()} hitSlop={10} style={styles.back}>
@@ -93,7 +95,7 @@ export default function Signup() {
               <View style={styles.brandBlock}>
                 <Logo width={150} />
                 <Text style={styles.tagline}>Repairs</Text>
-                <Text style={[styles.tagline, { color: colors.orange, fontWeight: '600' }]}>wherever you are.</Text>
+                <Text style={[styles.tagline, { color: colors.orangeText, fontWeight: '600' }]}>wherever you are.</Text>
               </View>
             </View>
 
@@ -152,7 +154,7 @@ export default function Signup() {
               {/* Terms */}
               <Pressable onPress={() => setAgree((v) => !v)} style={styles.terms} accessibilityRole="checkbox" accessibilityState={{ checked: agree }}>
                 <View style={[styles.check, agree && styles.checkOn]}>
-                  {agree && <MaterialCommunityIcons name="check" size={15} color="#fff" />}
+                  {agree && <MaterialCommunityIcons name="check" size={15} color={colors.onAccent} />}
                 </View>
                 <Text style={styles.termsText}>
                   I agree to the <Text style={styles.link}>Terms</Text> & <Text style={styles.link}>Privacy Policy</Text>
@@ -167,7 +169,7 @@ export default function Signup() {
                   start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
                   style={styles.btn}
                 >
-                  <MaterialCommunityIcons name="account-plus-outline" size={22} color="#fff" />
+                  <MaterialCommunityIcons name="account-plus-outline" size={22} color={colors.onAccent} />
                   <Text style={styles.btnText}>Create Account</Text>
                 </LinearGradient>
               </Pressable>
@@ -189,7 +191,7 @@ export default function Signup() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed((colors) => ({
   flex: { flex: 1, backgroundColor: colors.bg },
   scroll: { paddingBottom: 28 },
 
@@ -200,21 +202,21 @@ const styles = StyleSheet.create({
   back: {
     position: 'absolute', top: 10, left: 14, width: 40, height: 40, borderRadius: 20,
     alignItems: 'center', justifyContent: 'center',
-    backgroundColor: 'rgba(20,24,29,0.85)', borderWidth: 1, borderColor: '#262C33',
+    backgroundColor: colors.glass2, borderWidth: 1, borderColor: colors.border,
   },
   brandBlock: { flex: 1, justifyContent: 'flex-end', paddingLeft: 20, paddingBottom: 14 },
   tagline: { fontSize: 11.5, color: colors.text, marginTop: 3 },
 
   card: {
     marginHorizontal: 16, marginTop: -6, padding: 20, borderRadius: 28,
-    backgroundColor: 'rgba(15,19,25,0.92)', borderWidth: 1, borderColor: '#242B34',
+    backgroundColor: colors.glass, borderWidth: 1, borderColor: colors.borderSoft,
   },
   title: { color: colors.text, fontSize: 27, fontWeight: '800' },
-  subtitle: { color: '#AAB4C0', fontSize: 14.5, marginTop: 6, marginBottom: 18 },
+  subtitle: { color: colors.soft, fontSize: 14.5, marginTop: 6, marginBottom: 18 },
 
   input: {
     flexDirection: 'row', alignItems: 'center', gap: 12, height: 54, paddingHorizontal: 16,
-    borderRadius: radius.md, backgroundColor: '#12171E', borderWidth: 1, borderColor: '#2A323C', marginBottom: 12,
+    borderRadius: radius.md, backgroundColor: colors.field, borderWidth: 1, borderColor: colors.fieldBorder, marginBottom: 12,
   },
   inputFocus: { borderColor: colors.orange },
   inputText: { flex: 1, minWidth: 0, color: colors.text, fontSize: 16, height: '100%', ...Platform.select({ web: { outlineStyle: 'none' } }) },
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,122,26,0.15)',
   },
   sosTitle: { color: colors.text, fontSize: 15, fontWeight: '700' },
-  sosNote: { color: '#AAB4C0', fontSize: 12, marginTop: 2, lineHeight: 16 },
+  sosNote: { color: colors.soft, fontSize: 12, marginTop: 2, lineHeight: 16 },
 
   terms: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 4, marginBottom: 14 },
   check: {
@@ -236,8 +238,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center',
   },
   checkOn: { backgroundColor: colors.orange, borderColor: colors.orange },
-  termsText: { color: '#AAB4C0', fontSize: 13.5, flexShrink: 1 },
-  link: { color: colors.orange, fontWeight: '600' },
+  termsText: { color: colors.soft, fontSize: 13.5, flexShrink: 1 },
+  link: { color: colors.orangeText, fontWeight: '600' },
 
   error: { color: colors.red, fontSize: 13, marginBottom: 12, lineHeight: 18 },
 
@@ -245,12 +247,12 @@ const styles = StyleSheet.create({
     height: 54, borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center',
     justifyContent: 'center', gap: 10,
   },
-  btnText: { color: '#fff', fontSize: 19, fontWeight: '700' },
+  btnText: { color: colors.onAccent, fontSize: 19, fontWeight: '700' },
 
   loginRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, marginTop: 20 },
-  loginMuted: { color: '#AAB4C0', fontSize: 14 },
+  loginMuted: { color: colors.soft, fontSize: 14 },
   loginLink: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  loginText: { color: colors.orange, fontSize: 15, fontWeight: '600' },
+  loginText: { color: colors.orangeText, fontSize: 15, fontWeight: '600' },
 
-  footerText: { color: '#7C8794', fontSize: 11, letterSpacing: 2.5, textAlign: 'center', marginTop: 22 },
-});
+  footerText: { color: colors.faint, fontSize: 11, letterSpacing: 2.5, textAlign: 'center', marginTop: 22 },
+}));

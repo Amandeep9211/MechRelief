@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { Page, Header, SectionTitle } from '../components/ui';
 
 const FAQ = [
@@ -15,6 +15,7 @@ const FAQ = [
 ];
 
 export default function Help() {
+  useTheme();
   const [open, setOpen] = useState(0);
   return (
     <Page header={<Header title="Help & Support" fallback="/(tabs)/profile" />}>
@@ -36,11 +37,11 @@ export default function Help() {
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   item: { padding: 14, borderRadius: radius.lg, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, marginBottom: 10 },
   top: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   q: { flex: 1, color: colors.text, fontSize: 15, fontWeight: '600' },
-  a: { color: '#AAB4C0', fontSize: 13.5, lineHeight: 20, marginTop: 10 },
+  a: { color: colors.soft, fontSize: 13.5, lineHeight: 20, marginTop: 10 },
   contact: { flexDirection: 'row', gap: 12, padding: 14, borderRadius: radius.md, backgroundColor: 'rgba(255,122,26,0.08)', borderWidth: 1, borderColor: 'rgba(255,122,26,0.25)', marginTop: 10 },
-  cText: { flex: 1, color: '#C3CAD2', fontSize: 13.5, lineHeight: 19 },
-});
+  cText: { flex: 1, color: colors.soft2, fontSize: 13.5, lineHeight: 19 },
+}));

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Platform } from 'react-native';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import { useApp } from '../state/AppState';
 import { Page, Header, Button } from '../components/ui';
 
@@ -20,6 +20,7 @@ const maskPhone = (p = '') => {
 };
 
 export default function VerifyOtp() {
+  useTheme();
   const router = useRouter();
   const { mode = 'signup', phone = '' } = useLocalSearchParams();
   const { pending, setUser, setPending } = useApp();
@@ -127,23 +128,23 @@ export default function VerifyOtp() {
 
       <View style={s.demo}>
         <Text style={s.demoTag}>DEMO MODE</Text>
-        <Text style={s.demoText}>No SMS is sent in this demo. Use the code <Text style={{ color: colors.orange, fontWeight: '800', letterSpacing: 2 }}>{DEMO_OTP}</Text>.</Text>
+        <Text style={s.demoText}>No SMS is sent in this demo. Use the code <Text style={{ color: colors.orangeText, fontWeight: '800', letterSpacing: 2 }}>{DEMO_OTP}</Text>.</Text>
       </View>
     </Page>
   );
 }
 
-const s = StyleSheet.create({
+const s = themed((colors) => ({
   hero: { alignItems: 'center', paddingVertical: 10 },
   iconWrap: { width: 84, height: 84, borderRadius: 42, backgroundColor: 'rgba(255,122,26,0.12)', alignItems: 'center', justifyContent: 'center' },
   title: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: 16 },
-  sub: { color: '#AAB4C0', fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 22 },
+  sub: { color: colors.soft, fontSize: 14.5, textAlign: 'center', marginTop: 8, lineHeight: 22 },
   phone: { color: colors.text, fontWeight: '700' },
   boxesWrap: { marginTop: 22, alignItems: 'center' },
   boxes: { flexDirection: 'row', gap: 10 },
-  box: { width: 48, height: 60, borderRadius: 14, backgroundColor: '#12171E', borderWidth: 1, borderColor: '#2A323C', alignItems: 'center', justifyContent: 'center' },
+  box: { width: 48, height: 60, borderRadius: 14, backgroundColor: colors.field, borderWidth: 1, borderColor: colors.fieldBorder, alignItems: 'center', justifyContent: 'center' },
   boxActive: { borderColor: colors.orange, backgroundColor: 'rgba(255,122,26,0.08)' },
-  boxFilled: { borderColor: '#3A434D' },
+  boxFilled: { borderColor: colors.border2 },
   boxError: { borderColor: colors.red },
   digit: { color: colors.text, fontSize: 26, fontWeight: '800' },
   hidden: { position: 'absolute', width: '100%', height: '100%', opacity: 0.01, color: 'transparent', ...Platform.select({ web: { outlineStyle: 'none', cursor: 'pointer' } }) },
@@ -151,11 +152,11 @@ const s = StyleSheet.create({
   err: { color: colors.red, fontSize: 13.5 },
   resendRow: { alignItems: 'center', marginTop: 22 },
   resendMuted: { color: colors.muted, fontSize: 14 },
-  resend: { color: colors.orange, fontSize: 15, fontWeight: '700' },
+  resend: { color: colors.orangeText, fontSize: 15, fontWeight: '700' },
   sentNote: { color: colors.green, fontSize: 12.5, textAlign: 'center', marginTop: 6 },
   change: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 18 },
-  changeText: { color: colors.orange, fontSize: 14, fontWeight: '600' },
-  demo: { marginTop: 28, padding: 14, borderRadius: radius.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: '#3A434D', gap: 4 },
+  changeText: { color: colors.orangeText, fontSize: 14, fontWeight: '600' },
+  demo: { marginTop: 28, padding: 14, borderRadius: radius.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.border2, gap: 4 },
   demoTag: { color: colors.muted, fontSize: 11, fontWeight: '800', letterSpacing: 1.5 },
-  demoText: { color: '#8B95A1', fontSize: 13, lineHeight: 19 },
-});
+  demoText: { color: colors.faint, fontSize: 13, lineHeight: 19 },
+}));

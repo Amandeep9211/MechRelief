@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { colors } from '../../../constants/theme';
+import { colors, useTheme } from '../../../constants/theme';
 import { useTabBarStyle } from '../../../components/ui';
 import { slideTransition } from '../../../components/tabTransition';
 
@@ -10,6 +10,7 @@ const tab = (title, icon) => ({
 });
 
 export default function MechanicTabs() {
+  useTheme();
   const tabBarStyle = useTabBarStyle();
   return (
     <Tabs
@@ -18,7 +19,7 @@ export default function MechanicTabs() {
         ...slideTransition,
         lazy: false, // sab tabs pehle se load, taake pehli baar bhi slide ho
         tabBarActiveTintColor: colors.orange,
-        tabBarInactiveTintColor: '#AEB7C2',
+        tabBarInactiveTintColor: colors.navInactive,
         tabBarHideOnKeyboard: true,
         tabBarStyle,
         tabBarItemStyle: { borderRadius: 24 },

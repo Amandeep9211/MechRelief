@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { colors, radius } from '../constants/theme';
+import { colors, radius, themed, useTheme } from '../constants/theme';
 import Logo from '../components/Logo';
 
 // Login screen. Abhi sirf screen hai (backend login agle step mein jurega).
@@ -16,6 +16,7 @@ const ROLES = [
 ];
 
 export default function Login() {
+  useTheme();
   const router = useRouter();
   const [role, setRole] = useState('customer');       // radio button ki state
   const [phone, setPhone] = useState('');
@@ -37,7 +38,7 @@ export default function Login() {
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <View style={styles.flex}>
-        <LinearGradient colors={['#141A22', colors.bg]} style={StyleSheet.absoluteFill} />
+        <LinearGradient colors={[colors.bgTop, colors.bg]} style={StyleSheet.absoluteFill} />
         <SafeAreaView style={styles.flex}>
           <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
             {/* Header: photo + logo + naam */}
@@ -45,20 +46,20 @@ export default function Login() {
               <View style={styles.heroBox}>
                 <Image source={require('../../assets/login-hero.jpg')} style={styles.heroImg} resizeMode="cover" />
                 <LinearGradient
-                  colors={[colors.bg, 'rgba(11,13,16,0)']}
+                  colors={[colors.bg, colors.bgClear]}
                   locations={[0, 0.2]}
                   start={{ x: 0, y: 0.5 }} end={{ x: 1, y: 0.5 }}
                   style={StyleSheet.absoluteFill}
                 />
                 <LinearGradient
-                  colors={[colors.bg, 'rgba(11,13,16,0)']}
+                  colors={[colors.bg, colors.bgClear]}
                   style={styles.heroTopFade}
                 />
               </View>
               <View style={styles.brandBlock}>
                 <Logo width={150} />
                 <Text style={styles.tagline}>Repairs</Text>
-                <Text style={[styles.tagline, { color: colors.orange, fontWeight: '600' }]}>wherever you are.</Text>
+                <Text style={[styles.tagline, { color: colors.orangeText, fontWeight: '600' }]}>wherever you are.</Text>
               </View>
             </View>
 
@@ -139,7 +140,7 @@ export default function Login() {
                   start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
                   style={styles.loginBtn}
                 >
-                  <MaterialCommunityIcons name="login" size={22} color="#fff" />
+                  <MaterialCommunityIcons name="login" size={22} color={colors.onAccent} />
                   <Text style={styles.loginText}>Login</Text>
                 </LinearGradient>
               </Pressable>
@@ -176,7 +177,7 @@ export default function Login() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themed((colors) => ({
   flex: { flex: 1, backgroundColor: colors.bg },
   scroll: { paddingBottom: 24 },
 
@@ -192,15 +193,15 @@ const styles = StyleSheet.create({
 
   card: {
     marginHorizontal: 16, marginTop: -6, padding: 20, borderRadius: 28,
-    backgroundColor: 'rgba(15,19,25,0.92)', borderWidth: 1, borderColor: '#242B34',
+    backgroundColor: colors.glass, borderWidth: 1, borderColor: colors.borderSoft,
   },
   title: { color: colors.text, fontSize: 27, fontWeight: '800' },
-  subtitle: { color: '#AAB4C0', fontSize: 14.5, marginTop: 6, marginBottom: 16 },
+  subtitle: { color: colors.soft, fontSize: 14.5, marginTop: 6, marginBottom: 16 },
 
   roles: { flexDirection: 'row', gap: 10, marginBottom: 14 },
   role: {
     flex: 1, flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 10, height: 46,
-    borderRadius: radius.md, backgroundColor: '#12171E', borderWidth: 1, borderColor: '#2A323C',
+    borderRadius: radius.md, backgroundColor: colors.field, borderWidth: 1, borderColor: colors.fieldBorder,
   },
   roleSelected: { borderColor: colors.orange, backgroundColor: 'rgba(255,122,26,0.08)' },
   radio: {
@@ -213,29 +214,29 @@ const styles = StyleSheet.create({
 
   input: {
     flexDirection: 'row', alignItems: 'center', gap: 12, height: 56, paddingHorizontal: 16,
-    borderRadius: radius.md, backgroundColor: '#12171E', borderWidth: 1, borderColor: '#2A323C', marginBottom: 12,
+    borderRadius: radius.md, backgroundColor: colors.field, borderWidth: 1, borderColor: colors.fieldBorder, marginBottom: 12,
   },
   inputFocus: { borderColor: colors.orange },
   inputText: { flex: 1, minWidth: 0, color: colors.text, fontSize: 16, height: '100%', ...Platform.select({ web: { outlineStyle: 'none' } }) },
   error: { color: colors.red, fontSize: 13, marginBottom: 6 },
 
   forgot: { alignSelf: 'flex-end', marginBottom: 16, marginTop: 2 },
-  forgotText: { color: colors.orange, fontSize: 14 },
+  forgotText: { color: colors.orangeText, fontSize: 14 },
 
   loginBtn: {
     height: 54, borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center',
     justifyContent: 'center', gap: 10,
   },
-  loginText: { color: '#fff', fontSize: 19, fontWeight: '700' },
+  loginText: { color: colors.onAccent, fontSize: 19, fontWeight: '700' },
 
   signupRow: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 10, marginTop: 20 },
-  signupMuted: { color: '#AAB4C0', fontSize: 14 },
+  signupMuted: { color: colors.soft, fontSize: 14 },
   signupLink: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  signupText: { color: colors.orange, fontSize: 15, fontWeight: '600' },
-  adminNote: { color: '#AAB4C0', fontSize: 12.5, textAlign: 'center', marginTop: 18, lineHeight: 18 },
+  signupText: { color: colors.orangeText, fontSize: 15, fontWeight: '600' },
+  adminNote: { color: colors.soft, fontSize: 12.5, textAlign: 'center', marginTop: 18, lineHeight: 18 },
 
   footer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 14, marginTop: 22, paddingHorizontal: 40 },
-  footerLine: { flex: 1, height: 1, backgroundColor: '#242B34' },
+  footerLine: { flex: 1, height: 1, backgroundColor: colors.borderSoft },
   footerLogo: { width: 34, height: 26, alignItems: 'center', justifyContent: 'center' },
-  footerText: { color: '#7C8794', fontSize: 11, letterSpacing: 2.5, textAlign: 'center', marginTop: 10 },
-});
+  footerText: { color: colors.faint, fontSize: 11, letterSpacing: 2.5, textAlign: 'center', marginTop: 10 },
+}));
